@@ -18,7 +18,9 @@ import javax.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -136,6 +138,10 @@ public class User implements UserDetails {
 		return true;
 	}
 	
-	
+	public User toUser(PasswordEncoder passwordEncoder, String firstName, String secondName) {
+		this.setPassword(passwordEncoder.encode(password));
+		this.setLogin(firstName.substring(0,4) + secondName.substring(0,4));
+		return this;
+	}
 
 }
