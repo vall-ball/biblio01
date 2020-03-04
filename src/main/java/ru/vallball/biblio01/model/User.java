@@ -20,6 +20,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "users")
@@ -29,7 +31,6 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
 	@Size(min = 3, max = 30)
 	private String login;
 
@@ -53,6 +54,7 @@ public class User implements UserDetails {
 
 	@NotNull
 	@Column(name = "date_of_birth")
+	@JsonFormat(pattern = "yyyy.MM.dd")
 	private LocalDate dateOfBirth;
 		
 	public String getLogin() {
@@ -138,9 +140,18 @@ public class User implements UserDetails {
 		return true;
 	}
 	
+	public String createLogin(String firstName, String lastName) {
+		StringBuilder builder = new StringBuilder();
+		if (firstName.length() <=4)	builder.append(firstName);
+		else builder.append(firstName.substring(0,4));
+		if (lastName.length() <=4)	builder.append(lastName);
+		else builder.append(lastName.substring(0,4));
+		return builder.toString();
+	}
+	
 	public User toUser(PasswordEncoder passwordEncoder, String firstName, String secondName) {
 		this.setPassword(passwordEncoder.encode(password));
-		this.setLogin(firstName.substring(0,4) + secondName.substring(0,4));
+		this.setLogin(this.createLogin(firstName, firstName));
 		return this;
 	}
 

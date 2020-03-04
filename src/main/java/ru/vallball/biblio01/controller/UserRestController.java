@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import ru.vallball.biblio01.model.User;
 import ru.vallball.biblio01.service.UserService;
@@ -29,26 +32,35 @@ public class UserRestController {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
+
 	@GetMapping
 	@ResponseBody
 	public List<User> list() {
+		logger.info("Вы вошли на сайт");
 		return userService.list();
 	}
-	
+
 	@GetMapping("/{id}")
 	@ResponseBody
 	public User get(@PathVariable(value = "id") Long id) {
 		return userService.findUserById(id);
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Object> create(@Valid @RequestBody User user) {
-		userService.save(user.toUser(passwordEncoder, user.getFirstName(), user.getLastName()));
-		return new ResponseEntity<>("User is created successfully", HttpStatus.CREATED);
+		try {
+			userService.save(user.toUser(passwordEncoder, user.getFirstName(), user.getLastName()));
+
+			return new ResponseEntity<>("User is created successfully", HttpStatus.CREATED);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пользователь с такими именем и фамилией существует", e);
+
+		}
 	}
 
 	@PutMapping("/{id}")
@@ -60,6 +72,7 @@ public class UserRestController {
 			userForUpdate.setFirstName(user.getFirstName());
 			userForUpdate.setLastName(user.getLastName());
 			userForUpdate.setRole(user.getRole());
+			userForUpdate.setLogin(user.getLogin());
 			userService.save(userForUpdate);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
@@ -77,5 +90,4 @@ public class UserRestController {
 		return new ResponseEntity<>("User is deleted successfully", HttpStatus.ACCEPTED);
 	}
 
-	
 }
