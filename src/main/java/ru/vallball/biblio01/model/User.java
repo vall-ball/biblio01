@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
+	
+	private static final Logger logger = LoggerFactory.getLogger(User.class);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -144,14 +148,16 @@ public class User implements UserDetails {
 		StringBuilder builder = new StringBuilder();
 		if (firstName.length() <=4)	builder.append(firstName);
 		else builder.append(firstName.substring(0,4));
+		logger.info(builder.toString());
 		if (lastName.length() <=4)	builder.append(lastName);
 		else builder.append(lastName.substring(0,4));
-		return builder.toString();
+		logger.info(builder.toString());
+		return builder.toString().toLowerCase();
 	}
 	
-	public User toUser(PasswordEncoder passwordEncoder, String firstName, String secondName) {
+	public User toUser(PasswordEncoder passwordEncoder, String firstName, String lastName) {
 		this.setPassword(passwordEncoder.encode(password));
-		this.setLogin(this.createLogin(firstName, firstName));
+		this.setLogin(this.createLogin(firstName, lastName));
 		return this;
 	}
 

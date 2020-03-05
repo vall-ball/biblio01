@@ -31,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/users/**").hasRole("LIBRARIAN")
+		.and().authorizeRequests().antMatchers("/genres/**").hasRole("LIBRARIAN")
 		.and().httpBasic()
 		.and().csrf().disable();
 
