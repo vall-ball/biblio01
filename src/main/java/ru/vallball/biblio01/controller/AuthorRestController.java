@@ -54,7 +54,7 @@ public class AuthorRestController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody Author author) {
+	public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Author author) {
 		try {
 			Author authorForChange = authorService.findAuthorById(id);
 			authorForChange.setFirstName(author.getFirstName());
@@ -64,7 +64,7 @@ public class AuthorRestController {
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>("Author not found", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>("Author is udated successfully", HttpStatus.ACCEPTED);
+		return new ResponseEntity<>("Author is updated successfully", HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/{id}")

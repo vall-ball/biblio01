@@ -64,7 +64,7 @@ public class UserRestController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody User user) {
+	public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) {
 		try {
 			User userForUpdate = userService.findUserById(id);
 			userForUpdate.setDateOfBirth(user.getDateOfBirth());
