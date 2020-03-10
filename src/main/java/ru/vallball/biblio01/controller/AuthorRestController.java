@@ -26,10 +26,10 @@ import ru.vallball.biblio01.service.AuthorService;
 @RestController
 @RequestMapping(value = "/authors", produces = "application/json")
 public class AuthorRestController {
-	
+
 	@Autowired
 	AuthorService authorService;
-	
+
 	@GetMapping
 	@ResponseBody
 	public List<Author> list() {
@@ -76,6 +76,5 @@ public class AuthorRestController {
 		}
 		return new ResponseEntity<>("Author is deleted successfully", HttpStatus.ACCEPTED);
 	}
-
 
 }

@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and().authorizeRequests().antMatchers("/genres/**").hasRole("LIBRARIAN")
 		.and().authorizeRequests().antMatchers("/authors/**").hasRole("LIBRARIAN")
 		.and().authorizeRequests().antMatchers("/series/**").hasRole("LIBRARIAN")
+		.and().authorizeRequests().antMatchers("/books/**").hasRole("LIBRARIAN")
 		.and().httpBasic()
 		.and().csrf().disable();
 
