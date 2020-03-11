@@ -31,18 +31,18 @@ public class Book {
 	private String title;
 
 	@NotNull
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "books_authors", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
 	private Set<Author> authors = new HashSet<>();
 
 	@PositiveOrZero
 	private int quantity;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "series_id")
 	private Series series;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "books_genres", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
 	private Set<Genre> genres = new HashSet<>();
 
@@ -89,5 +89,13 @@ public class Book {
 	public Long getId() {
 		return id;
 	}
+
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", title=" + title + ", authors=" + authors + ", quantity=" + quantity + ", series="
+				+ series + ", genres=" + genres + "]";
+	}
+	
+	
 
 }

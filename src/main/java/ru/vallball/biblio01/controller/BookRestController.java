@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,9 @@ import ru.vallball.biblio01.service.BookService;
 @RequestMapping(value = "/books", produces = "application/json")
 public class BookRestController {
 
+	private static final Logger logger = LoggerFactory.getLogger(BookRestController.class);
+
+	
 	@Autowired
 	BookService bookService;
 
@@ -44,10 +49,13 @@ public class BookRestController {
 
 	@PostMapping
 	public ResponseEntity<Object> create(@Valid @RequestBody Book book) {
+		logger.info("@PostMapping " + book);
+		System.out.println("@PostMapping " + book);
 		try {
 			bookService.save(book);
 			return new ResponseEntity<>("Book is created successfully", HttpStatus.CREATED);
 		} catch (Exception e) {
+			logger.info(e.getMessage());
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Такая книга существует", e);
 
 		}

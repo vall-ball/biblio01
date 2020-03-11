@@ -57,4 +57,12 @@ public class Author {
 		return id;
 	}
 
+	@Override
+	public String toString() {
+		return "Author [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", language=" + language
+				+ "]";
+	}
+	
+	
+
 }
