@@ -161,4 +161,12 @@ public class User implements UserDetails {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", login=" + login + ", firstName=" + firstName + ", lastName=" + lastName + ", role="
+				+ role + ", dateOfBirth=" + dateOfBirth + "]";
+	}
+
+	
+	
 }

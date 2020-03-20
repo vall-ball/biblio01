@@ -36,13 +36,11 @@ public class BookRestController {
 	BookService bookService;
 
 	@GetMapping
-	@ResponseBody
 	public List<Book> list() {
 		return bookService.list();
 	}
 
 	@GetMapping("/{id}")
-	@ResponseBody
 	public Book get(@PathVariable(value = "id") Long id) {
 		return bookService.findBookById(id);
 	}
@@ -50,12 +48,13 @@ public class BookRestController {
 	@PostMapping
 	public ResponseEntity<Object> create(@Valid @RequestBody Book book) {
 		logger.info("@PostMapping " + book);
+		logger.info(book.getAuthors().toString());
 		System.out.println("@PostMapping " + book);
 		try {
 			bookService.save(book);
 			return new ResponseEntity<>("Book is created successfully", HttpStatus.CREATED);
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+		//	logger.info(e.getMessage());
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Такая книга существует", e);
 
 		}

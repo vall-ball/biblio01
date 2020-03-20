@@ -22,8 +22,8 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public void save(Book book) {
-		logger.info("BookServiceImpl " + book );
-		logger.info(book.getAuthors().iterator().next().toString());
+		logger.info("BookServiceImpl " + book.toString() );
+		logger.info(book.toString());
 		bookRepository.save(book);
 	}
 

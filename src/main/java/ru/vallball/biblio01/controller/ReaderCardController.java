@@ -5,8 +5,11 @@ import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.web.JsonPath;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,12 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import ru.vallball.biblio01.model.ReaderCard;
+import ru.vallball.biblio01.model.User;
 import ru.vallball.biblio01.service.ReaderCardService;
+import ru.vallball.biblio01.service.UserService;
 
 @RestController
 @RequestMapping(value = "/cards", produces = "application/json")
 public class ReaderCardController {
 
+	//private static final Logger logger = LoggerFactory.getLogger(ReaderCardController.class);
+	
 	@Autowired
 	ReaderCardService readerCardService;
 
@@ -43,7 +50,7 @@ public class ReaderCardController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody @Valid ReaderCard readerCard) {
+	public ResponseEntity<Object> create(@RequestBody ReaderCard readerCard) {
 		try {
 			readerCardService.save(readerCard);
 			return new ResponseEntity<>("Card is created successfully", HttpStatus.CREATED);

@@ -18,6 +18,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 @Entity
 @Table(name = "books")
 public class Book {
@@ -90,12 +92,26 @@ public class Book {
 		return id;
 	}
 
-	@Override
-	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", authors=" + authors + ", quantity=" + quantity + ", series="
-				+ series + ", genres=" + genres + "]";
+	public String authorsToString() {
+		StringBuilder builder = new StringBuilder();
+		for (Author a : this.authors) {
+			builder.append(a).append("; ");
+		}
+		return builder.toString();
 	}
 	
+	public String genresToString() {
+		StringBuilder builder = new StringBuilder();
+		for (Genre g: this.genres) {
+			builder.append(g).append("; ");
+		}
+		return builder.toString();
+	}
 	
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", title=" + title + ", authors=" + authorsToString() + ", quantity=" + quantity + ", series="
+				+ series + ", genres=" + genresToString() + "]";
+	}
 
 }
